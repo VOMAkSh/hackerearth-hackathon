@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import firebase from "./config/fire";
+import Footer from './Component/Footer/footer';
+import Navbar from './Component/Navbar/Navbar';
+import Websitebody from './Component/Websitebody/Websiterbody';
 
 const fcmConfiguration = () => {
   const messaging = firebase.messaging();
@@ -29,7 +32,11 @@ class App extends Component {
     fcmConfiguration();
   };
   render() {
-    return <div className="App">Basic Boilerplate code</div>;
+    return (<div>
+        <Navbar />
+        <Websitebody />
+        <Footer />
+      </div>);
   }
 }
 
