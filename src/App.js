@@ -1,27 +1,35 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import firebase from "./config/fire";
+
+const fcmConfiguration = () => {
+  const messaging = firebase.messaging();
+  messaging.onMessage(payload => {
+    console.log("Notification Received", payload);
+  });
+  messaging
+    .requestPermission()
+    .then(() => {
+      console.log("Have Permission");
+      return messaging.getToken();
+    })
+    .then(token => {
+      console.log("FCM Token:", token);
+    })
+    .catch(error => {
+      if (error.code === "messaging/permission-blocked") {
+        console.log("Please Unblock Notification Request Manually");
+      } else {
+        console.log("Error Occurred", error);
+      }
+    });
+};
 
 class App extends Component {
+  componentDidMount = () => {
+    fcmConfiguration();
+  };
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+    return <div className="App">Basic Boilerplate code</div>;
   }
 }
 
