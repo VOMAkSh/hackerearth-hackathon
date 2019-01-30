@@ -51,7 +51,6 @@ export class FirstTimeLoginPage extends Component {
           this.state.instance.close();
         })
         .catch(error => {
-          console.log(error);
           window.M.toast({
             html: "Error has occurred while saving your choices"
           });
@@ -64,7 +63,6 @@ export class FirstTimeLoginPage extends Component {
     this.setState({
       selectedTags: [...this.state.selectedTags, tag]
     });
-    console.log(this.state.selectedTags);
   };
   removeTags = tag => {
     this.setState({

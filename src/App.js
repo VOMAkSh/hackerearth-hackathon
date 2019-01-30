@@ -102,7 +102,7 @@ class App extends Component {
           .get()
           .then(docSnapshot => {
             if (docSnapshot.exists) {
-              window.M.toast({ html: "User already exists" });
+              window.M.toast({ html: "You have been logged in successfully." });
               db.collection("users")
                 .doc(uid)
                 .get()
@@ -173,6 +173,9 @@ class App extends Component {
         console.log(error);
       });
   };
+  reloadPage = () => {
+    window.location.reload();
+  };
   render() {
     return (
       <Router>
@@ -206,6 +209,7 @@ class App extends Component {
                 mySocieties={this.state.mySocieties}
                 mySocietyList={this.state.mySocietyList}
                 logout={this.logout}
+                reloadPage={this.reloadPage}
                 {...props}
               />
             )}
@@ -224,6 +228,7 @@ class App extends Component {
                 mySocieties={this.state.mySocieties}
                 mySocietyList={this.state.mySocietyList}
                 logout={this.logout}
+                reloadPage={this.reloadPage}
                 {...props}
               />
             )}

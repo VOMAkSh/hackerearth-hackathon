@@ -2,8 +2,6 @@ import React, { Component, Fragment } from "react";
 import firebase from "firebase";
 import FirstTimeLoginPage from "../FirstTimeLoginPage/FirstTimeLoginPage";
 import DashboardHeader from "../../components/DashboardHeader/DashboardHeader";
-import CreateSocietyModal from "../../components/CreateSocietyModal/CreateSocietyModal";
-import MySocietiesModal from "../../components/MySocietiesModal/MySocietiesModal";
 import Loader from "../../components/Loader/Loader";
 import CreateNewEventModal from "../../components/CreateNewEventModal/CreateNewEventModal";
 import "react-datepicker/dist/react-datepicker.css";
@@ -31,7 +29,7 @@ export class SocietyPage extends Component {
     };
   }
   componentDidMount = () => {
-    console.log(this.props);
+    window.M.AutoInit();
     this.setState({
       societyId: this.props.match.params.societyId
     });
@@ -48,16 +46,18 @@ export class SocietyPage extends Component {
           founderUid: doc.data().uid,
           loading: false
         });
-        doc.data().events.forEach(event => {
-          db.collection("events")
-            .doc(event)
-            .get()
-            .then(doc => {
-              this.setState({
-                events: [...this.state.events, doc.data()]
+        if (doc.data().events) {
+          doc.data().events.forEach(event => {
+            db.collection("events")
+              .doc(event)
+              .get()
+              .then(doc => {
+                this.setState({
+                  events: [...this.state.events, doc.data()]
+                });
               });
-            });
-        });
+          });
+        }
       });
   };
   donateMoney = event => {
@@ -91,6 +91,12 @@ export class SocietyPage extends Component {
       events: [...this.state.events, event]
     });
   };
+  goToDashboard = () => {
+    window.M.Tooltip.getInstance(
+      document.getElementById("dashboardTooltip")
+    ).close();
+    this.props.history.push("/dashboard");
+  };
   render() {
     return (
       <div>
@@ -100,6 +106,10 @@ export class SocietyPage extends Component {
           photoUrl={this.props.photoUrl}
           mySocieties={this.props.mySocieties}
           mySocietyList={this.props.mySocietyList}
+          uid={this.props.uid}
+          reloadPage={this.props.reloadPage}
+          backButton={true}
+          goToDashboard={this.goToDashboard}
         />
         {this.state.loading ? (
           <div style={{ width: "100%", height: "90%", marginTop: "60px" }}>
@@ -190,12 +200,6 @@ export class SocietyPage extends Component {
           open={this.props.firstTimeLoggedIn}
           loading={this.props.loading}
         />
-        <CreateSocietyModal
-          uid={this.props.uid}
-          path={this.props.location.pathName}
-          history={this.props.history}
-        />
-        <MySocietiesModal mySocietyList={this.props.mySocietyList} />
         <CreateNewEventModal
           societyId={this.state.societyId}
           path={this.props.location.pathName}

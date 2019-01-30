@@ -16,9 +16,6 @@ export class Dashboard extends Component {
       this.props.history.push("/");
     }
   };
-  reloadPage = () => {
-    window.location.reload();
-  };
   render() {
     return (
       <div>
@@ -28,6 +25,10 @@ export class Dashboard extends Component {
           photoUrl={this.props.photoUrl}
           mySocieties={this.props.mySocieties}
           mySocietyList={this.props.mySocietyList}
+          uid={this.props.uid}
+          reloadPage={this.props.reloadPage}
+          mySocietyList={this.props.mySocietyList}
+          backButton={false}
         />
         <GroupsList />
         <EventsList />
@@ -36,8 +37,6 @@ export class Dashboard extends Component {
           open={this.props.firstTimeLoggedIn}
           loading={this.props.loading}
         />
-        <CreateSocietyModal uid={this.props.uid} reloadPage={this.reloadPage} />
-        <MySocietiesModal mySocietyList={this.props.mySocietyList} />
       </div>
     );
   }

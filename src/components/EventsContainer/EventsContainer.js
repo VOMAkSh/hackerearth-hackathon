@@ -3,7 +3,6 @@ import EventContainer from "../EventContainer/EventContainer";
 
 export class EventsContainer extends Component {
   render() {
-    console.log(this.props);
     return (
       <div className="container">
         {!this.props.loading ? (
