@@ -3,9 +3,6 @@ import firebase from "firebase";
 import Loader from "../../components/Loader/Loader";
 
 const db = firebase.firestore();
-db.settings({
-  timestampsInSnapshots: true
-});
 
 export class FirstTimeLoginPage extends Component {
   constructor(props) {
@@ -19,27 +16,28 @@ export class FirstTimeLoginPage extends Component {
     };
   }
   componentDidMount() {
+    console.log("In first time login component did mount");
     this.setState({
       loading: true
     });
-    document.addEventListener("DOMContentLoaded", () => {
-      var elem = document.querySelector("#firstTimeLoginModal");
-      var instance = window.M.Modal.init(elem, { dismissible: false });
-      this.setState({ instance });
-      db.collection("tags")
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.docs.forEach(doc => {
-            this.setState({
-              allTags: [...this.state.allTags, doc.data()],
-              loading: false
-            });
+    var elem = document.querySelector("#firstTimeLoginModal");
+    var instance = window.M.Modal.init(elem, { dismissible: false });
+    console.log("instance", instance);
+    this.setState({ instance });
+    db.collection("tags")
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.docs.forEach(doc => {
+          this.setState({
+            allTags: [...this.state.allTags, doc.data()],
+            loading: false
           });
         });
-    });
+      });
   }
   checkIfRequiredTagsSelected = () => {
     if (this.state.selectedTags.length >= 5) {
+      this.props.setFirstTimeLoginAfterSelection();
       db.collection("users")
         .doc(this.props.uid)
         .update({

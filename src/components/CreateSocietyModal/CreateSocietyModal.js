@@ -3,9 +3,6 @@ import firebase from "firebase";
 import Loader from "../Loader/Loader";
 
 const db = firebase.firestore();
-db.settings({
-  timestampsInSnapshots: true
-});
 
 export class CreateSocietyModal extends Component {
   constructor(props) {

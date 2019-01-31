@@ -7,9 +7,6 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import SocietyPage from "./pages/SocietyPage/SocietyPage";
 
 const db = firebase.firestore();
-db.settings({
-  timestampsInSnapshots: true
-});
 
 const fcmConfiguration = () => {
   const messaging = firebase.messaging();
@@ -58,31 +55,35 @@ class App extends Component {
           .collection("users")
           .doc(user.uid)
           .get();
-        const mySocieties = userInfo.data().mySocieties;
-        mySocieties.forEach(societyId => {
-          db.collection("groups")
-            .doc(societyId)
-            .get()
-            .then(doc => {
-              this.setState({
-                mySocietyList: [
-                  ...this.state.mySocietyList,
-                  { societyId, societyName: doc.data().name }
-                ]
+        if (userInfo.data()) {
+          const mySocieties = userInfo.data().mySocieties;
+          mySocieties.forEach(societyId => {
+            db.collection("groups")
+              .doc(societyId)
+              .get()
+              .then(doc => {
+                this.setState({
+                  mySocietyList: [
+                    ...this.state.mySocietyList,
+                    { societyId, societyName: doc.data().name }
+                  ]
+                });
               });
-              this.setState({
-                isAuthenticated: true,
-                photoUrl: user.photoURL,
-                email: user.email,
-                name: user.displayName,
-                uid: user.uid,
-                firstTimeLoggedIn: userInfo.data().firstTimeLoggedIn,
-                mySocieties: userInfo.data().mySocieties
-                  ? userInfo.data().mySocieties
-                  : [],
-                loading: false
-              });
-            });
+          });
+          this.setState({
+            firstTimeLoggedIn: userInfo.data().firstTimeLoggedIn,
+            mySocieties: userInfo.data().mySocieties
+              ? userInfo.data().mySocieties
+              : []
+          });
+        }
+        this.setState({
+          isAuthenticated: true,
+          photoUrl: user.photoURL,
+          email: user.email,
+          name: user.displayName,
+          uid: user.uid,
+          loading: false
         });
       } else {
         console.log("No user logged in yet.....");
@@ -103,29 +104,6 @@ class App extends Component {
           .then(docSnapshot => {
             if (docSnapshot.exists) {
               window.M.toast({ html: "You have been logged in successfully." });
-              db.collection("users")
-                .doc(uid)
-                .get()
-                .then(doc => {
-                  const mySocieties = doc.data().mySocieties;
-                  mySocieties.forEach(societyId => {
-                    db.collection("groups")
-                      .doc(societyId)
-                      .get()
-                      .then(doc => {
-                        this.setState({
-                          mySocietyList: [
-                            ...this.state.mySocietyList,
-                            { societyId, societyName: doc.data().name }
-                          ]
-                        });
-                        this.setState({
-                          firstTimeLoggedIn: doc.data().firstTimeLoggedIn,
-                          mySocieties: doc.data().mySocieties
-                        });
-                      });
-                  });
-                });
             } else {
               window.M.toast({ html: "Creating user" });
               db.collection("users")
@@ -154,6 +132,11 @@ class App extends Component {
       .catch(error => {
         console.log(error);
       });
+  };
+  setFirstTimeLoginAfterSelection = () => {
+    this.setState({
+      firstTimeLoggedIn: false
+    });
   };
   logout = () => {
     firebase
@@ -210,6 +193,9 @@ class App extends Component {
                 mySocietyList={this.state.mySocietyList}
                 logout={this.logout}
                 reloadPage={this.reloadPage}
+                setFirstTimeLoginAfterSelection={
+                  this.setFirstTimeLoginAfterSelection
+                }
                 {...props}
               />
             )}
@@ -229,6 +215,9 @@ class App extends Component {
                 mySocietyList={this.state.mySocietyList}
                 logout={this.logout}
                 reloadPage={this.reloadPage}
+                setFirstTimeLoginAfterSelection={
+                  this.setFirstTimeLoginAfterSelection
+                }
                 {...props}
               />
             )}

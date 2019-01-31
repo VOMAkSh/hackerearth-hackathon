@@ -15,6 +15,7 @@ export class Dashboard extends Component {
     if (!this.props.loading && !this.props.isAuthenticated) {
       this.props.history.push("/");
     }
+    console.log(this.props);
   };
   render() {
     return (
@@ -36,6 +37,9 @@ export class Dashboard extends Component {
           uid={this.props.uid}
           open={this.props.firstTimeLoggedIn}
           loading={this.props.loading}
+          setFirstTimeLoginAfterSelection={
+            this.props.setFirstTimeLoginAfterSelection
+          }
         />
       </div>
     );

@@ -6,10 +6,6 @@ import LoginSignUpModal from "../../components/LoginSignUpModal/LoginSignUpModal
 import firebase from "firebase";
 
 const db = firebase.firestore();
-db.settings({
-  timestampsInSnapshots: true
-});
-
 export class HomePage extends Component {
   render() {
     return (

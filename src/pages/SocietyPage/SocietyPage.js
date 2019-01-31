@@ -127,7 +127,14 @@ export class SocietyPage extends Component {
                 <p className="flow-text">Our Home Town is {this.state.city}</p>
                 {this.props.uid == this.state.founderUid ? (
                   <div>
-                    <div className="btn-large green" style={{ cursor: "auto" }}>
+                    <div
+                      className="btn-large green"
+                      style={{
+                        cursor: "auto",
+                        marginTop: "10px",
+                        marginBottom: "10px"
+                      }}
+                    >
                       <b style={{ fontSize: "20px" }}>Donation Money</b>
                       <span style={{ marginLeft: "10px" }} />
                       <i
@@ -148,7 +155,10 @@ export class SocietyPage extends Component {
                   </div>
                 ) : (
                   <div>
-                    <button className="btn-large orange darken-2">
+                    <button
+                      className="btn-large orange darken-2"
+                      style={{ marginBottom: "10px" }}
+                    >
                       <i class="fas fa-users" />
                       <b style={{ marginLeft: "10px" }}>Follow Us</b>
                     </button>
@@ -199,6 +209,9 @@ export class SocietyPage extends Component {
           uid={this.props.uid}
           open={this.props.firstTimeLoggedIn}
           loading={this.props.loading}
+          setFirstTimeLoginAfterSelection={
+            this.props.setFirstTimeLoginAfterSelection
+          }
         />
         <CreateNewEventModal
           societyId={this.state.societyId}
